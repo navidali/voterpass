@@ -14,16 +14,16 @@ var QR_code = null;
 var today = new Date();
 var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();//maybe manully type in the time
 
-var register = {
+var voter = {
     _id: id,
     QR: QR_code,
     time_entered: time,
     completed: false,
     time_left:null
 };
-db.put(register, function callback(err, result) {
+db.put(voter, function callback(err, result) {
     if (!err) {
-      console.log('Successfully put a register in line');
+      console.log('Successfully put a voter in line');
     }
  });
 }
