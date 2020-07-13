@@ -10,9 +10,12 @@ var remoteDB = new PouchDB('http://user:password@127.0.0.1:5984/database'); // e
 
 // adds entry to db
 function addVoter(name){
+    var today = new Date();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     localDB.put({
             _id: new Date().toISOString(),
-            voterName: name
+            voterName: name,
+            time_enter: time
     }).then(function(result) {
         console.log("new entry recorded");
     }).catch(function(err) {
@@ -29,7 +32,7 @@ function removeVoter(name){
 
     localDB.find({
         selector: {voterName: name},
-        fields: ['_id', 'voterName', '_rev']
+        fields: ['_id', 'voterName','time_enter', '_rev']
     }).then(function (result) {
         return localDB.remove(result.docs[0]);
     }).then(function(result){
@@ -48,7 +51,7 @@ function updateVoterName(oldName, newName){
 
     localDB.find({
         selector: {voterName: oldName},
-        fields: ['_id', 'voterName', '_rev']
+        fields: ['_id', 'voterName','time_enter', '_rev']
     }).then(function (result) {
         return localDB.put({
            _id: result.docs[0]._id,
