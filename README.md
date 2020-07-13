@@ -1,8 +1,8 @@
-# electron-quick-start
+# voter-pass
 
-**Clone and run for a quick way to see Electron in action.**
+**Clone and run to see Voter Pass in action**
 
-This is a minimal Electron application based on the [Quick Start Guide](https://electronjs.org/docs/tutorial/quick-start) within the Electron documentation.
+This is an Electron-powered desktop application based on the [Quick Start Guide](https://electronjs.org/docs/tutorial/quick-start) within the Electron documentation.
 
 **Use this app along with the [Electron API Demos](https://electronjs.org/#get-started) app for API code examples to help you get started.**
 
@@ -16,15 +16,19 @@ You can learn more about each of these components within the [Quick Start Guide]
 
 ## To Use
 
-To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
+From your command line:
 
 ```bash
 # Clone this repository
-git clone https://github.com/electron/electron-quick-start
+git clone https://github.com/trevor-forget
 # Go into the repository
-cd electron-quick-start
+cd trevor-forget
 # Install dependencies
 npm install
+# May need to run manual dependencies of:
+npm install -g gulp
+npm install fomantic-ui
+
 # Run the app
 npm start
 ```
