@@ -20,7 +20,7 @@
     "electron": "^9.0.5"
   },
   "dependencies": {
-    "add-cors-to-couchdb": "0.0.6",
-    "pouchdb-browser": "^7.2.1"
+    "pouchdb-browser": "^7.2.1",
+    "pouchdb-find": "^7.2.1"
   }
 }
