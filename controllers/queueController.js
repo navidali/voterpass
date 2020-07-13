@@ -9,7 +9,23 @@ var remoteCouch = false;
 
 // adds entry to db
 function add(){
+var id = Math.round(Math.random() * 100000);
+var QR_code = null;
+var today = new Date();
+var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();//maybe manully type in the time
 
+var register = {
+    _id: id,
+    QR: QR_code,
+    time_entered: time,
+    completed: false,
+    time_left:null
+};
+db.put(register, function callback(err, result) {
+    if (!err) {
+      console.log('Successfully put a register in line');
+    }
+ });
 }
 
 // removes an entry from db
