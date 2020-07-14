@@ -22,6 +22,8 @@
   "dependencies": {
     "couchdb": "^0.3.8",
     "fomantic-ui": "^2.8.6",
+    "pouchdb-browser": "^7.2.1",
+    "pouchdb-find": "^7.2.1",
     "semantic-ui-css": "^2.4.1"
   }
 }
