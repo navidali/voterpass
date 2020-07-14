@@ -3,6 +3,7 @@
 <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
 <script src="/semantic/dist/semantic.min.js"></script>
 <html>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css"/>
   <head>
     <meta charset="UTF-8">
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
@@ -11,11 +12,13 @@
     <title>Voter Pass</title>
   </head>
   <body>
-    <h1>Voter Pass</h1>
+    <h1 class ="ui left aligned header">Voter Pass</h1>
+    <a href="inLine.html"><button class="ui primary button">Go To Queue</button></a>
+    <h5 class="ui justified header">
     We are using Node.js <span id="node-version"></span>,
     Chromium <span id="chrome-version"></span>,
     and Electron <span id="electron-version"></span>.
-    <a href="inLine.html"><button>Go To Queue</button></a>
+    </h5>
 
     <!-- You can also require other files to run in this process -->
     <script src="./renderer.js"></script>
