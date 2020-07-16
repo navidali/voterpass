@@ -9,11 +9,11 @@ let voters = [];
 let eta = 24;
 
 // adds entry to db
-function addVoter(name){
+function addVoter(){
     var today = new Date();
     localDB.put({
             _id: today.toISOString(),
-            voterName: name,
+            voterName: Math.floor(Math.random() * 1000000000),
             time_enter: today.toLocaleTimeString(),
             time_return: new Date(new Date().getTime() + eta * 60000).toLocaleTimeString()   // manually setting 24 min ahead
     }).then(function(result) {
