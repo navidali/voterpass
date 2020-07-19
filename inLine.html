@@ -53,7 +53,7 @@
     <table class="ui single line table">
       <thead>
         <tr>
-          <th>ID</th>
+          <th>Name</th>
           <th>Time Entered</th>
           <th>Estimated Return Time</th>
         </tr>
@@ -61,7 +61,7 @@
       <tbody>
       </tbody>
     </table>
-    <button onclick="addVoter()"class = "btn btn-outline-secondary">Add to Queue</button>
+    <a id="addBtn" class="ui secondary button" href="./form.html">Add to Queue</a>
     <button id="removeBtn" class="red ui button">Remove from Queue</button>
 
     <a class="ui huge button" href="index.html">Go to Home</a>
@@ -96,7 +96,7 @@
       });
       $("#removeBtn").on('click', function(){
         $(".highlight").each(function() {
-          let name = $(this).find("td:eq(0)").text();
+          let name =  $(this).find("td:eq(0)").text();
           removeVoter(name);
         });
       });
