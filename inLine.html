@@ -63,9 +63,10 @@
           </tbody>
         </table>
         </div>
-        <a id="addBtn" class="black ui button" href="./form.html">Add to Queue</a>
+        <!-- a id="addBtn" class="black ui button" href="./form.html">Add to Queue</a>
         <button id="removeBtn" class="red ui button">Remove from Queue</button>
-        <!-- <button class="green ui button">Generate New Voter</button> -->
+        < <button class="green ui button">Generate New Voter</button> -->
+        <button id="addBtn" class="ui secondary button">Add to Queue</button>
         <div style="width: 80%" class="ui raised segment">
           <div style="margin-bottom: 20px" class="ui right aligned action input">
             <input type="text" placeholder="i.e.) 15">
@@ -140,7 +141,7 @@
         onUnchecked() {
           $('#members_dropdown').dropdown('clear');
         },
-      });
+      });/*
       $("table").on('click','td',function() {
         $(this).parent().toggleClass('highlight');
       });
@@ -149,7 +150,10 @@
           let name =  $(this).find("td:eq(0)").text();
           removeVoter(name);
         });
-      });
+      });*/
+      $('#addBtn').on('click',function(){
+        addVoter(24);
+      })
 
      window.onload=drawTable();
     </script>
