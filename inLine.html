@@ -146,7 +146,7 @@
       });
       $("#removeBtn").on('click', function(){
         $(".highlight").each(function() {
-          let name = $(this).find("td:eq(0)").text();
+          let name =  $(this).find("td:eq(0)").text();
           removeVoter(name);
         });
       });

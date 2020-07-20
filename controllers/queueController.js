@@ -6,22 +6,46 @@ PouchDB.plugin(require('pouchdb-find'));
 const localDB = new PouchDB('mylocaldb');
 const remoteDB = new PouchDB('http://navidali:navid786@127.0.0.1:5984/myremotedb'); // example couchdb server http://user:password@127.0.0.1:5984/database_name
 let voters = [];
-let eta = 24;
-
+let eta = 10;
+let facility = 2;
+let counter = 0;
+if(!localStorage.getItem('eta')) {
+  localStorage.setItem('eta',eta )
+}
 // adds entry to db
 function addVoter(name){
     var today = new Date();
+    let eta_variable = localStorage.getItem('eta')  // estimated return timeincrease voter increase
     localDB.put({
             _id: today.toISOString(),
             voterName: name,
             time_enter: today.toLocaleTimeString(),
-            time_return: new Date(new Date().getTime() + eta * 60000).toLocaleTimeString()   // manually setting 24 min ahead
+            time_return: new Date(today.getTime() + eta_variable * 60000).toLocaleTimeString(),   // manually setting 10 min ahead
+            time_toCompare: new Date(today.getTime() + eta_variable * 60000)   // better to compare
     }).then(function(result) {
         console.log("new entry recorded");
-        eta += 24;
+        // eta += 10;
+        localStorage.setItem('eta',Number(localStorage.getItem('eta')) + 10 )  // 10 minutes per person
     }).catch(function(err) {
         console.log(err);
     });
+   
+}
+
+
+
+function compareTime(time){
+  console.log('time: ', time);
+  var myDate = new Date(time); 
+  var today = new Date();
+  var diff = today - myDate;
+  console.log('diff: ', diff);
+  var expire = 15*60000;
+ if (diff > expire) {
+   return true;
+ }
+ return false;
+
 }
 
 // removes an entry from db
@@ -51,9 +75,12 @@ function removeVoter(name){
           key: name,
           include_docs: true
         });
-      }).then(function (result) {
-        console.log("removed doc");
-        return localDB.remove(result.rows[0].doc);
+      }).then(function (result) {//compare expire time and expected return time
+        // console.log('result: ', result);
+        if(result.rows[0] && compareTime(result.rows[0].doc.time_toCompare)){
+          console.log("removed doc");
+          return localDB.remove(result.rows[0].doc);
+        }
       }).catch(function (err) {
         console.log(err);
       });
@@ -137,7 +164,12 @@ function remove(name){
       });
 }
 
-function drawTable() {
+async function drawTable() {
+  // try {
+  //   await localDB.destroy();
+  // } catch (err) {
+  //   console.log(err);
+  // }
     const tbody = document.querySelector("tbody");
     localDB.allDocs({
         include_docs: true,
@@ -154,7 +186,6 @@ function drawTable() {
                 time_enter.innerHTML = voter.doc.time_enter;
                 let time_return = row.insertCell(2);
                 time_return.innerHTML = voter.doc.time_return;
-            
             });
         }
         voter = result.rows;
