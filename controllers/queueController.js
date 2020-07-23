@@ -1,3 +1,4 @@
+const QRCode = require('qrcode')
 const PouchDB = require('pouchdb-browser');
 PouchDB.plugin(require('pouchdb-find'));
 
@@ -5,77 +6,75 @@ PouchDB.plugin(require('pouchdb-find'));
 // Navigate to Application -> IndexedDB -> name of database
 const localDB = new PouchDB('mylocaldb');
 const remoteDB = new PouchDB('http://localhost:5984/myremotedb');
-remoteDB.info();
 let queue = [];
 let eta = 24;
-var ddoc = 
-{
-  _id: '_design/index',
-  views: {
-    index: {
-      map: function mapFun(doc) {
-        if (doc.voterName) {
-          emit(doc.voterName, null);
-        }
-      }.toString()
-    }
-  }
-};
-
-localDB.put(ddoc).catch(function (err) {
-  if (err.name !== 'conflict') {
-    throw err;
-  }
-// ignore if doc already exists 
-});
        
-function generate_id() {
+function generateId() {
   let S4 = () => {
      return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
   };
   return (S4()+"-"+S4()+"-"+S4()+S4());
 }
 
-/*function parse_time(time){
-
-  var arr = time.split(/[:punct:]|\s/);
-  console.log(arr);
-  let obj = new Date();
-
-}*/
-
-
-function generateReturnTime() {
+function generateReturnTime(eta) {
   if (queue.length === 0)
     return new Date().getTime();
   else{
     last = queue[queue.length - 1];
-    
-    // fix this return
-    // return suppose to add extra 30 min or something to last.time_return
     return new Date(last.time_return + eta * 60000).getTime();
   }
 }
 
+function generateQR() {
+  let canvas = document.getElementById('canvas')
+ 
+  QRCode.toCanvas(canvas, 'Voter ID and some return time', function (error) {
+    if (error) console.error(error)
+    console.log('success!');
+  });
+}
+
+function find(){
+  localDB.allDocs({
+    include_docs: true,
+    startkey: "9",
+    endkey: "0",
+    descending: true,
+    limit: 1
+  }).then(function(result){
+    console.log(result.rows[0].doc)
+  }).catch(function(err){
+    console.log(err);
+  });
+}
+
 // adds entry to db
-async function addVoter(eta){
-    var today = new Date();
+function addVoter(eta){
+    let today = new Date();
+    let obj = {
+      _id: today.toISOString(),
+      voter_id: generateId(),
+      time_enter: today.getTime(),
+      time_return: generateReturnTime(eta)
+    };
+
     localDB.put({
-            _id: today.toISOString(),
-            voter_id: generate_id(),
-            time_enter: today.getTime(),
-            time_return: generateReturnTime()
+            _id: obj._id,
+            voter_id: obj.voter_id,
+            time_enter: obj.time_enter,
+            time_return: obj.time_return
     }).then(function(result) {
         console.log("new entry recorded");
-        console.log(result);
-        drawTable();
+        console.log(result); 
+        queue.push(obj);
+        //addRow(obj)
     }).catch(function(err) {
         console.log(err);
     });
 }
 
-
 // removes an entry from db
+/*
 function removeVoter(name){          
   // find docs where title === 'Lisa Says'
   localDB.query('index', {
@@ -123,11 +122,12 @@ function remove(time_enter){
         console.log(err);
       });
 }
+*/
 
+//called on page refresh/load
 function drawTable() {
     let tbody =  document.querySelector("tbody");
     tbody.innerHTML = "";
-    queue = [];  
     localDB.allDocs({
         include_docs: true,
         startkey: "0",
@@ -142,7 +142,6 @@ function drawTable() {
                 time_enter.innerHTML = new Date(voter.doc.time_enter).toLocaleTimeString();
                 let time_return = row.insertCell(2);
                 time_return.innerHTML = new Date(voter.doc.time_return).toLocaleTimeString();
-                queue.push(voter.doc);
             });
         }
     }).catch(function (err) {
@@ -150,15 +149,29 @@ function drawTable() {
     });
 }
 
+// adds a tr element 
+function addRow(obj) {
+  let tbody =  document.querySelector("tbody");
+  let row = tbody.insertRow();
+  let name = row.insertCell(0);
+  name.innerHTML = obj.voter_id;
+  let time_enter = row.insertCell(1);
+  time_enter.innerHTML = new Date(obj.time_enter).toLocaleTimeString();
+  let time_return = row.insertCell(2);
+  time_return.innerHTML = new Date(obj.time_return).toLocaleTimeString();
+}
+
+
 // currently live two-way sync of databases
 localDB.sync(remoteDB, {
   live: true,
   retry: true
 }).on('change', function (change) {
-  // yo, something changed!
+    // yo, something changed!
 }).on('paused', function (info) {
-  // replication was paused, usually because of a lost connection
+    // replication was paused, usually because of a lost connection
 }).on('active', function (info) {
-  // replication was resumed
+    // replication was resumed
 }).on('error', function (err) {
+
 });

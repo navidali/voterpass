@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Voter Pass</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <p>Voter Id Here</p>
+            <canvas id="canvas"></canvas>
+            <p>Return Message Here</p>
+        </div>
+        <button id="addBtn" class="ui secondary button">Add Another</button>
+        <button id="backBtn" class="ui button" onclick="location.href= './inLine.html';">Go Back</button>
+    </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.js"></script>
+<script src="./controllers/queueController.js"></script>
+<script>
+    $('#addBtn').on('click',function(){
+        addVoter(24);
+        location.href = "./voter.html";
+    });
+
+    window.onload=generateQR();
+</script>
+<html>
