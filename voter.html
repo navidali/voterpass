@@ -8,9 +8,9 @@
     </head>
     <body>
         <div class="container">
-            <p>Voter Id Here</p>
+            <p id="voterId"></p>
             <canvas id="canvas"></canvas>
-            <p>Return Message Here</p>
+            <p id="message"></p>
         </div>
         <button id="addBtn" class="ui secondary button">Add Another</button>
         <button id="backBtn" class="ui button" onclick="location.href= './inLine.html';">Go Back</button>
@@ -24,6 +24,6 @@
         location.href = "./voter.html";
     });
 
-    window.onload=generateQR();
+    window.onload=drawTicket();
 </script>
 <html>

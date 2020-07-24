@@ -25,16 +25,7 @@ function generateReturnTime(eta) {
   }
 }
 
-function generateQR() {
-  let canvas = document.getElementById('canvas')
- 
-  QRCode.toCanvas(canvas, 'Voter ID and some return time', function (error) {
-    if (error) console.error(error)
-    console.log('success!');
-  });
-}
-
-function find(){
+function drawTicket() {
   localDB.allDocs({
     include_docs: true,
     startkey: "9",
@@ -42,10 +33,23 @@ function find(){
     descending: true,
     limit: 1
   }).then(function(result){
-    console.log(result.rows[0].doc)
+    let id = document.getElementById("voterId");
+    id.innerHTML = "Voter ID: " + result.rows[0].doc.voter_id;
+
+    let canvas = document.getElementById('canvas')
+ 
+    QRCode.toCanvas(canvas, 'Voter ID: ' + result.rows[0].doc.voter_id + "\nReturn By: " + new Date(result.rows[0].doc.time_return).toLocaleTimeString(), function (error) {
+      if (error) console.error(error)
+        console.log('success!');
+    });
+
+
+    let message = document.getElementById("message");
+    message.innerHTML = "Please Return By: " + new Date(result.rows[0].doc.time_return).toLocaleTimeString();
+
   }).catch(function(err){
     console.log(err);
-  });
+  });   
 }
 
 // adds entry to db
