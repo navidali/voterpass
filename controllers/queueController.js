@@ -6,9 +6,31 @@ PouchDB.plugin(require('pouchdb-find'));
 // Navigate to Application -> IndexedDB -> name of database
 const localDB = new PouchDB('mylocaldb');
 const remoteDB = new PouchDB('http://localhost:5984/myremotedb');
+remoteDB.info();
 let queue = [];
 let eta = 24;
-       
+var ddoc = 
+{
+  _id: '_design/index',
+  views: {
+    index: {
+      map: function mapFun(doc) {
+        if (doc.voterName) {
+          emit(doc.voterName, null);
+        }
+      }.toString()
+    }
+  }
+};
+
+localDB.put(ddoc).catch(function (err) {
+  if (err.name !== 'conflict') {
+    throw err;
+  }
+// ignore if doc already exists 
+});
+     
+
 function generateId() {
   let S4 = () => {
      return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
@@ -52,6 +74,36 @@ function addVoter(eta){
         console.log(err);
     });
   }
+
+  function compareTime(time){
+    var today = new Date().getTime();
+    var diff = today - time;
+    console.log('diff: ', diff);
+    var expire = 5*60000;
+   if (diff > expire) {
+     return true;
+   }
+   return false;
+  
+  }
+
+  function autoRemove() {
+    let timer;
+    for(let [index, item] of queue.entries()) {
+      const boolean = compareTime(item.time_return);
+      if(!boolean) break;
+  
+      $('#queue tr').each(function(i,j){     
+        if(index === i) {
+          $(j).css("background-color", "gray");
+        }
+      });
+    }
+    timer = setTimeout(() => {autoRemove()}, 10000)  // check every 10 second
+  }
+  autoRemove()
+  
+  
 
 function drawTable() {
   let tbody =  document.querySelector("tbody");
