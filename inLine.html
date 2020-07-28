@@ -64,6 +64,7 @@
         <button id="removeBtn" class="red ui button">Remove from Queue</button>
         < <button class="green ui button">Generate New Voter</button> -->
         <button id="addBtn" class="ui secondary button">Add to Queue</button>
+        <button id="scanBtn" class="ui primary button">Scan QR</button>
         <div style="width: 80%" class="ui raised segment">
           <div style="margin-bottom: 20px" class="ui right aligned action input">
             <input type="text" placeholder="i.e.) 15">
@@ -143,6 +144,10 @@
       $('#addBtn').on('click',function(){
         addVoter(24);
         location.href = "./voter.html";
+      });
+
+      $('#scanBtn').on('click',function(){
+        location.href = "./scan.html";
       });
 
      window.onload=drawTable();

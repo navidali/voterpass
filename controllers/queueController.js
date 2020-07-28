@@ -1,6 +1,8 @@
+const ZXing = require('@zxing/library');
 const QRCode = require('qrcode');
 const PouchDB = require('pouchdb-browser');
 PouchDB.plugin(require('pouchdb-find'));
+
 
 // PouchDB is viewable in dev tools 
 // Navigate to Application -> IndexedDB -> name of database
@@ -120,6 +122,18 @@ function addRow(obj){
   let time_return = row.insertCell(2);
   time_return.innerHTML = new Date(obj.time_return).toLocaleTimeString();
 }
+
+function scan(){
+
+  let video = document.getElementById('video');
+  const codeReader = new ZXing.BrowserQRCodeReader();
+  
+  codeReader
+  .decodeOnceFromVideoDevice(undefined, 'video')
+  .then(result => console.log(result.text))
+  .catch(err => console.error(err));
+}
+
 
 // currently live two-way sync of databases
 localDB.sync(remoteDB, {

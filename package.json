@@ -20,6 +20,7 @@
     "electron": "^9.1.0"
   },
   "dependencies": {
+    "@zxing/library": "^0.17.0",
     "fomantic-ui": "^2.8.6",
     "pouchdb-browser": "^7.2.1",
     "pouchdb-find": "^7.2.1",
