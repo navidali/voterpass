@@ -8,7 +8,6 @@ const localDB = new PouchDB('mylocaldb');
 const remoteDB = new PouchDB('http://localhost:5984/myremotedb');
 remoteDB.info();
 let queue = [];
-let eta = 24;
 var ddoc = 
 {
   _id: '_design/index',
@@ -23,13 +22,15 @@ var ddoc =
   }
 };
 
+if(localStorage.getItem('eta') === null)
+  localStorage.setItem('eta', '12');
+
 localDB.put(ddoc).catch(function (err) {
   if (err.name !== 'conflict') {
     throw err;
   }
 // ignore if doc already exists 
-});
-     
+});     
 
 function generateId() {
   let S4 = () => {
@@ -38,25 +39,24 @@ function generateId() {
   return (S4()+"-"+S4()+"-"+S4()+S4());
 }
 
-function generateReturnTime(eta) {
+function generateReturnTime() {
   if (queue.length === 0)
-    return new Date().getTime();
+    return (new Date().getTime() + localStorage.getItem("eta") * 60000);
   else{
     last = queue[queue.length-1];
-    return (last.time_return + eta * 60000);
+    return (last.time_return + localStorage.getItem("eta") * 60000);
   }
 }
 
-
 // adds entry to db
-function addVoter(eta){
+function addVoter(){
   var today = new Date();
   
   let obj = {
     _id: today.toISOString(),
       voter_id: generateId(),
       time_enter: today.getTime(),
-      time_return: generateReturnTime(eta)
+      time_return: generateReturnTime()
     };
     queue.push(obj);
     localDB.put({
@@ -75,36 +75,35 @@ function addVoter(eta){
     });
   }
 
-  function compareTime(time){
-    var today = new Date().getTime();
-    var diff = today - time;
-    console.log('diff: ', diff);
-    var expire = 5*60000;
-   if (diff > expire) {
-     return true;
-   }
-   return false;
-  
+function compareTime(time){
+  var today = new Date().getTime();
+  var diff = today - time;
+  console.log('diff: ', diff);
+  var expire = 5*60000;
+  if (diff > expire) {
+    return true;
   }
+  return false;
 
-  function autoRemove() {
-    let timer;
-    for(let [index, item] of queue.entries()) {
-      const boolean = compareTime(item.time_return);
-      if(!boolean) break;
-  
-      $('#queue tr').each(function(i,j){     
-        if(index === i) {
-          $(j).css("background-color", "gray");
-        }
-      });
-    }
-    timer = setTimeout(() => {autoRemove()}, 10000)  // check every 10 second
+}
+
+function autoRemove() {
+  let timer;
+  for(let [index, item] of queue.entries()) {
+    const boolean = compareTime(item.time_return);
+    if(!boolean) break;
+
+    $('#queue tr').each(function(i,j){     
+      if(index === i) {
+        $(j).css("background-color", "gray");
+      }
+    });
   }
-  autoRemove()
+  timer = setTimeout(() => {autoRemove()}, 10000)  // check every 10 second
+}
+autoRemove()
   
   
-
 function drawTable() {
   let tbody =  document.querySelector("tbody");
   tbody.innerHTML = "";
@@ -129,6 +128,8 @@ function drawTable() {
       }).catch(function (err) {
         console.log(err);
     });
+
+    document.getElementById('eta').innerText = localStorage.getItem('eta');
   }
   
 function drawTicket() {
