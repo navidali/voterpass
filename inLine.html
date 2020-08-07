@@ -83,7 +83,6 @@
         < <button class="green ui button">Generate New Voter</button> -->
         <button id="addBtn" class="ui secondary button">Add to Queue</button>
         <button id="scanBtn" class="ui primary button">Scan QR</button>
-        <div style="width: 80%" class="ui raised segment"> 
     </div>
      <!--<div class="four wide column">
      <div style="width: 80%" class="ui raised segment">
@@ -109,6 +108,24 @@
         </div>
         <div class="ui input focus content">
           <input id="minutes" type="text" placeholder="How many minutes?" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57">
+        </div>
+        <div class="actions">
+          <div class="ui red basic cancel button">
+            <i class="remove icon"></i>
+            No
+          </div>
+          <div class="ui green ok inverted button">
+            <i class="checkmark icon"></i>
+            Yes
+          </div>
+        </div>
+      </div>
+      <div class="ui mini modal">
+        <div class="header">
+          Scanning QR Code
+        </div>
+        <div class="ui image content">
+          <video id="video" style="width: 50%; height: 50%; background-size:cover;"></video>
         </div>
         <div class="actions">
           <div class="ui red basic cancel button">
@@ -197,8 +214,10 @@
     });
 
       $('#scanBtn').on('click',function(){
-        location.href = "./scan.html";
-      });
+        $('.ui.mini.modal')
+      .modal('show');
+      scan();
+    });
 
      window.onload=drawTable();
     </script>

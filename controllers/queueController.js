@@ -10,29 +10,9 @@ const localDB = new PouchDB('mylocaldb');
 const remoteDB = new PouchDB('http://localhost:5984/myremotedb');
 remoteDB.info();
 let queue = [];
-var ddoc = 
-{
-  _id: '_design/index',
-  views: {
-    index: {
-      map: function mapFun(doc) {
-        if (doc.voterName) {
-          emit(doc.voterName, null);
-        }
-      }.toString()
-    }
-  }
-};
 
 if(localStorage.getItem('eta') === null)
   localStorage.setItem('eta', '12');
-
-localDB.put(ddoc).catch(function (err) {
-  if (err.name !== 'conflict') {
-    throw err;
-  }
-// ignore if doc already exists 
-});     
 
 function generateId() {
   let S4 = () => {
@@ -46,7 +26,12 @@ function generateReturnTime() {
     return (new Date().getTime() + localStorage.getItem("eta") * 60000);
   else{
     last = queue[queue.length-1];
-    return (last.time_return + localStorage.getItem("eta") * 60000);
+    if(last.time_return < new Date().getTime()){
+      return (new Date().getTime() + localStorage.getItem("eta") * 60000);
+    }
+    else{
+      return (last.time_return + localStorage.getItem("eta") * 60000);
+    }
   }
 }
 
@@ -103,7 +88,7 @@ function autoRemove() {
   }
   timer = setTimeout(() => {autoRemove()}, 10000)  // check every 10 second
 }
-autoRemove()
+autoRemove();
   
   
 function drawTable() {
@@ -150,7 +135,7 @@ function drawTicket() {
   
     let canvas = document.getElementById("canvas");
 
-    QRCode.toCanvas(canvas, "Voter ID: " + queue[queue.length - 1].voter_id + "\nReturn By: " + new Date(queue[queue.length - 1].time_return).toLocaleTimeString(), function(error) {
+    QRCode.toCanvas(canvas, "Voter_ID: " + queue[queue.length - 1].voter_id + " Return_By: " + new Date(queue[queue.length - 1].time_return).toLocaleTimeString(), function(error) {
       if(error)
         console.log(error);
       else
@@ -183,8 +168,52 @@ function scan(){
   
   codeReader
   .decodeOnceFromVideoDevice(undefined, 'video')
-  .then(result => console.log(result.text))
-  .catch(err => console.error(err));
+  .then(result => {
+    let id = result.text.split(" ", 4)[1];
+    let voter = queue.find(function(element) {
+      return element.voter_id === id;
+    });
+    if(voter)
+      removeVoter(voter.voter_id);
+    else
+      console.log("voter has already been removed.");
+    
+    location.reload();
+  }).catch(err => console.error(err));
+}
+
+// removes an entry from db
+function removeVoter(id){          
+  var ddoc = {
+    _id: '_design/index',
+    views: {
+      index: {
+        map: function mapFun(doc) {
+          if (doc.voter_id) {
+            emit(doc.voter_id);
+          }
+        }.toString()
+      }
+    }
+  };
+
+  // save the design doc
+  localDB.put(ddoc).catch(function (err) {
+    if (err.name !== 'conflict') {
+      throw err;
+    }
+    // ignore if doc already exists
+  }).then(function () {
+    return localDB.query('index', {
+      key: id,
+      include_docs: true
+    });
+  }).then(function (result) {
+    console.log("removed doc");
+    localDB.remove(result.rows[0].doc);
+  }).catch(function (err) {
+    console.log(err);
+  });
 }
 
 
