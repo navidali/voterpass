@@ -6,18 +6,17 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <style>
-          /*table{
-            width: 100%;
-            height:500px;
-            display:inline-block;
-            overflow-y: auto;
-          }*/
           #wait_time{
             width: 100px;
             height: 38px;
           }
           .ui.grid{
             padding-left: 2%;
+          }
+          .message{
+            position: absolute;
+            top:0;
+            left:0;
           }
         </style>
     </head>
@@ -100,8 +99,7 @@
               Update Expiration Time
             </div>
           </div>--> 
-      </div>
-
+    
       <div class="ui small modal">
         <div class="header">
           Change Wait Time
@@ -114,28 +112,25 @@
             <i class="remove icon"></i>
             No
           </div>
-          <div class="ui green ok inverted button">
+          <div id="ok" class="ui green ok inverted button">
             <i class="checkmark icon"></i>
             Yes
           </div>
         </div>
       </div>
+
       <div class="ui mini modal">
+        <div class="ui container"> 
+          <div class="ui hidden message"> 
+              <i class="close icon"></i> 
+              <div id="alert"></div>
+          </div> 
+        </div> 
         <div class="header">
           Scanning QR Code
         </div>
         <div class="ui image content">
           <video id="video" style="width: 50%; height: 50%; background-size:cover;"></video>
-        </div>
-        <div class="actions">
-          <div class="ui red basic cancel button">
-            <i class="remove icon"></i>
-            No
-          </div>
-          <div class="ui green ok inverted button">
-            <i class="checkmark icon"></i>
-            Yes
-          </div>
         </div>
       </div>
     </div>
@@ -177,46 +172,30 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.js"></script>
 <script src="./controllers/queueController.js"></script>
 
-    <script>
-    $('.dropdown').dropdown({
-      label: {
-        duration: 0,
-      },
-      debug: true,
-      performance: true,
-    });
-    $('.ui.checkbox')
-      .checkbox({
-        onChecked() {
-          const options = $('#members_dropdown > option').toArray().map(
-            (obj) => obj.value
-          );
-          $('#members_dropdown').dropdown('set exactly', options);
-        },
-        onUnchecked() {
-          $('#members_dropdown').dropdown('clear');
-        },
-      });
-     
+    <script>   
     $('#addBtn').on('click',function(){
       addVoter(24);
       location.href = "./voter.html";
     });
     
     $('#wait_time').on('click', function(){
-      $('.ui.small.modal')
-      .modal('show');
-    });
-    
-    $("#minutes").on("change", function() {
-      localStorage.setItem('eta', $(this).val());
-      document.getElementById("eta").innerText = $(this).val();
+      $('.ui.small.modal').modal({
+        onHide: function(){
+          $("#minutes").val('');
+        },
+        onApprove: function(){
+          localStorage.setItem('eta', $("#minutes").val());
+          document.getElementById("eta").innerText = $("#minutes").val();
+        }
+      }).modal('show');
     });
 
-      $('#scanBtn').on('click',function(){
-        $('.ui.mini.modal')
-      .modal('show');
-      scan();
+    $('#scanBtn').on('click',function(){
+        $('.ui.mini.modal').modal({
+          onShow: function(){
+            scan();
+          }
+        }).modal('show');
     });
 
      window.onload=drawTable();

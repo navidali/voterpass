@@ -3,12 +3,11 @@ const QRCode = require('qrcode');
 const PouchDB = require('pouchdb-browser');
 PouchDB.plugin(require('pouchdb-find'));
 
-
 // PouchDB is viewable in dev tools 
 // Navigate to Application -> IndexedDB -> name of database
 const localDB = new PouchDB('mylocaldb');
-const remoteDB = new PouchDB('http://localhost:5984/myremotedb');
-remoteDB.info();
+const remotedb = new PouchDB('http://localhost:5984/myremotedb');
+remotedb.info();
 let queue = [];
 
 if(localStorage.getItem('eta') === null)
@@ -173,12 +172,24 @@ function scan(){
     let voter = queue.find(function(element) {
       return element.voter_id === id;
     });
-    if(voter)
+    if(voter){
       removeVoter(voter.voter_id);
-    else
+      document.getElementById("alert").innerHTML = "Voter has been removed";
+    }
+    else{
       console.log("voter has already been removed.");
+      document.getElementById("alert").innerHTML = "Voter has already been removed.";
+    }
+
+    $('.message').transition('fade');
+    $('.message .close').on('click', function () {         
+      $(this).closest('.message').fadeOut(600); 
+    });
+    if($('.message').is(':visible')){
+        setTimeout(function(){ $('.message').fadeOut(600) }, 3000); 
+    }
     
-    location.reload();
+    setTimeout(function(){location.reload()},3000);
   }).catch(err => console.error(err));
 }
 
@@ -216,11 +227,9 @@ function removeVoter(id){
   });
 }
 
-
-// currently live two-way sync of databases
-localDB.sync(remoteDB, {
+localDB.sync(remotedb,{
   live: true,
-  retry: true
+  retry: true,
 }).on('change', function (change) {
     // yo, something changed!
 }).on('paused', function (info) {
