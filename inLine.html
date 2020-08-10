@@ -26,11 +26,8 @@
 
         <div class="ui container">
           <div class="ui large secondary inverted pointing menu">
-            <a class="toc item">
-              <i class="sidebar icon"></i>
-            </a>
             <a class="item" href="index.html">Home</a>
-            <a class="active item" href="inLine.html">Current Queue</a>
+            <a class="active item" href="inLine.html">Queue</a>
             <div class="right item">
               <div id="wait_time" class="ui red large top right attached label">Wait Time: 
                 <p id="eta" style="display: inline;"></p>
@@ -62,9 +59,9 @@
       <p>
     </form>-->
     <div class="ui grid">
-    <div class="eight wide column">
-      <h2>Current Queue</h2>
-      <div style=" width: 100%; height:500px; margin-bottom: 20px; overflow-y: auto; display: block;" class="ui right aligned raised segment">
+    <div class="twelve wide column centered">
+      <h2 style="text-align: center;">Current Queue</h2>
+      <div style=" width: 100%; height: 400px; margin-bottom: 20px; overflow-y: auto; display: block;" class="ui right aligned raised segment">
         <table style="width: 100%;" class="ui single line table">
           <thead class="ui centered aligned header">
             <tr>
@@ -110,11 +107,11 @@
         <div class="actions">
           <div class="ui red basic cancel button">
             <i class="remove icon"></i>
-            No
+            Cancel
           </div>
           <div id="ok" class="ui green ok inverted button">
             <i class="checkmark icon"></i>
-            Yes
+            Submit
           </div>
         </div>
       </div>

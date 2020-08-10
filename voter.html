@@ -17,13 +17,32 @@
         </style>
     </head>
     <body>
-        <div class="ui container"> 
-            <div class="ui message"> 
+        
+        <div class="ui inverted vertical masthead center aligned segment">
+
+            <div class="ui container">
+              <div class="ui large secondary inverted pointing menu">
+                <a class="toc item">
+                  <i class="sidebar icon"></i>
+                </a>
+                <a class="item" href="index.html">Home</a>
+                <a class="active item" href="inLine.html">Queue</a>
+              </div>
+            </div>
+          </div>
+        
+          
+  
+        <div class="ui container">
+            <div class="ui success message"> 
                 <i class="close icon"></i> 
                 <div>Voter has been added to the queue</div>
             </div> 
         </div>    
 
+    <div class="ui two column centered grid">
+        <div class="column">
+        <div style="width: 100%" class="ui raised segment center aligned">
         <div id="ticket" class="container">
             <p id="voterId"></p>
             <canvas id="canvas"></canvas>
@@ -32,6 +51,9 @@
         <button id="addBtn" class="ui secondary button">Add Another</button>
         <button id="backBtn" class="ui button" onclick="location.href= './inLine.html';">Go Back</button>
         <a href="javascript:window.print();">Print</a>
+        </div>
+        </div>
+    </div>
     </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.js"></script>
