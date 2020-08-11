@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Getting Started</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <style>
+      .highlight {background-color: #e8ecf8 ;}
+    </style>
+</head>
+  <body class="pushable">
+
+<!-- Sidebar Menu -->
+<div class="ui vertical inverted sidebar menu left">
+  <a class="active item">Home</a>
+  <a class="item">Work</a>
+  <a class="item">Company</a>
+  <a class="item">Careers</a>
+  <a class="item">Login</a>
+  <a class="item">Signup</a>
+</div>
+
+
+<!-- Page Contents -->
+<div class="pusher">
+  <div class="ui inverted vertical masthead center aligned segment">
+
+    <div class="ui container">
+      <div class="ui large secondary inverted pointing menu">
+        <a class="item" href="index.html">Home</a>
+        <a class="active item">Getting Started</a>
+        <a class="item" href="inLine.html">Current Queue</a>
+      </div>
+    </div>
+
+
+  </div>
+
+          <h3 class="ui header">Accessing the Queue</h3>
+          <p>There are two ways to access the Queue page: through the button found on the home page, or the tab labelled "Queue" in the top navigation bar</p>
+          <img src="goToQ.gif" class="ui centered massive bordered rounded image">
+
+          <h3 class="ui header">Setting the Estimated Wait Time</h3>
+          <p>To update the Estimated Wait Time, simply go to the Queue, and click on the red icon in the upper-right hand corner. Input the desired time, and click "Submit"</p>
+          <img src="changeEWT.gif" class="ui centered massive bordered rounded image">
+
+          <h3 class="ui header">Adding a Voter to the Queue</h3>
+          <p>You can add a voter simply by clicking the "Add Voter" button on the Queue page, below the list of current voters.</p>
+          <img src="addVoterToQ.gif" class="ui centered massive bordered rounded image">
+
+          <h3 class="ui header">Printing a Voter's QR code</h3>
+          <p>Choose a voter, and press "Print QR code" to connect to the desired printer and print the code.</p>
+          <img src="printQR.gif" class="ui centered massive bordered rounded image">
+
+          <h3 class="ui header">Scanning a Voter's QR code</h3>
+          <p>Once a voter approaches, click the "Scan Code" tab and have the user place the code within the camera' frame. Click "Take Picture" when ready, and it will confirm whether the user is valid and on time or not.</p>
+          <img src="scanQR.gif" class="ui centered massive bordered rounded image">
+      </div>
+</div>
+
+
+
+
+</body>
+    <!-- You can also require other files to run in this process -->
+    <script src="./renderer.js"></script>
+    <script src="controllers/queueController.js"></script>
+  </body>
+</html>
