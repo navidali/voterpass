@@ -237,7 +237,12 @@ function removeVoter(id){
     });
   }).then(function (result) {
     console.log("removed doc");
+
+    let table = document.getElementById('queue');
+    table.deleteRow(queue.indexOf(result.rows[0].doc));
+
     queue.splice(queue.indexOf(result.rows[0].doc), 1);
+    
     localDB.remove(result.rows[0].doc);
   }).catch(function (err) {
     console.log(err);
