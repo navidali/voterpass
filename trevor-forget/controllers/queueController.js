@@ -6,8 +6,6 @@ PouchDB.plugin(require('pouchdb-find'));
 // PouchDB is viewable in dev tools 
 // Navigate to Application -> IndexedDB -> name of database
 const localDB = new PouchDB('mylocaldb');
-const remotedb = new PouchDB('http://localhost:5984/myremotedb');
-remotedb.info();
 let queue = [];
 
 if(localStorage.getItem('eta') === null)
@@ -64,8 +62,8 @@ function addVoter(){
 function compareTime(time){
   var today = new Date().getTime();
   var diff = today - time;
-  console.log('diff: ', diff);
-  var expire = 5*60000;
+  //console.log('diff: ', diff);
+  var expire = 15*60000;
   if (diff > expire) {
     return true;
   }
@@ -75,14 +73,20 @@ function compareTime(time){
 
 function autoRemove() {
   let timer;
+  queue.forEach(function(voter) {
+    if(compareTime(voter.time_return))
+    {
+      removeVoter(voter.voter_id);
+    }
+  });
+
   for(let [index, item] of queue.entries()) {
-    const boolean = compareTime(item.time_return);
+    const boolean = (new Date().getTime() > item.time_return);
     if(!boolean) break;
 
     $('#queue tr').each(function(i,j){     
-      if(index === i) {
-        $(j).css("background-color", "gray");
-      }
+    if(index === i) 
+      $(j).css("background-color", "gray");
     });
   }
   timer = setTimeout(() => {autoRemove()}, 10000)  // check every 10 second
@@ -190,7 +194,19 @@ function scan(){
     }
     
     setTimeout(function(){location.reload()},3000);
-  }).catch(err => console.error(err));
+  }).catch(err => {
+    console.error(err)
+    document.getElementById("alert").innerHTML = "An error has occured.";
+    document.getElementsByClassName("message")[0].classList.add('error');
+
+    $('.message').transition('fade');
+      $('.message .close').on('click', function () {         
+        $(this).closest('.message').fadeOut(600); 
+      });
+      if($('.message').is(':visible')){
+          setTimeout(function(){ $('.message').fadeOut(600) }, 3000); 
+      }
+  });
 }
 
 // removes an entry from db
@@ -221,21 +237,14 @@ function removeVoter(id){
     });
   }).then(function (result) {
     console.log("removed doc");
+
+    let table = document.getElementById('queue');
+    table.deleteRow(queue.indexOf(result.rows[0].doc));
+
+    queue.splice(queue.indexOf(result.rows[0].doc), 1);
+    
     localDB.remove(result.rows[0].doc);
   }).catch(function (err) {
     console.log(err);
   });
-}
-
-localDB.sync(remotedb,{
-  live: true,
-  retry: true,
-}).on('change', function (change) {
-    // yo, something changed!
-}).on('paused', function (info) {
-    // replication was paused, usually because of a lost connection
-}).on('active', function (info) {
-    // replication was resumed
-}).on('error', function (err) {
-
-});
+};
