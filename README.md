@@ -1,49 +1,40 @@
-# voter-pass
 
-**Clone and run to see Voter Pass in action**
+# Voter Pass
+![Sample Queue Picture](sample.png)
 
-This is an Electron-powered desktop application based on the [Quick Start Guide](https://electronjs.org/docs/tutorial/quick-start) within the Electron documentation.
+Voter Pass is a desktop application designed to simplify and enhance the voting process by implementing a queue system. It reduces the tedious hours of standing in line by providing voters with a return ticket that indicates when they should return to the polling station. The application is built using Electron.js, Node.js, PouchDB, and Semantic UI.
 
-**Use this app along with the [Electron API Demos](https://electronjs.org/#get-started) app for API code examples to help you get started.**
+## Features
 
-A basic Electron application needs just these files:
+- **Offline First:** Voter Pass is an offline-first application, meaning it stores data locally on the device's cache using PouchDB. When an internet connection is available, the data is automatically synchronized with the cloud.
+- **Anonymous Return Tickets:** Each voter receives an anonymous return ticket containing a return timestamp and a scannable QR code. This ensures the privacy of voters while providing an efficient queue management system.
+- **QR Code Scanner:** The application includes a built-in QR code scanner, allowing attendants to easily scan and process return tickets.
+- **Seamless Queue Management:** Adding voters to the queue is a seamless process facilitated by a single button. Attendents can also modify the wait time if needed.
+- **Ticket Expiration:** Return tickets automatically expire after 30 minutes from the assigned return time, freeing up local cache resources.
 
-- `package.json` - Points to the app's main file and lists its details and dependencies.
-- `main.js` - Starts the app and creates a browser window to render HTML. This is the app's **main process**.
-- `index.html` - A web page to render. This is the app's **renderer process**.
+## Tech Stack
+- Electron.js: A framework for building cross-platform desktop applications using web technologies.
+- PouchDB: A NoSQL database that enables offline data storage and synchronization.
+- Semantic UI: A modern CSS framework for creating visually appealing and responsive user interfaces.
 
-You can learn more about each of these components within the [Quick Start Guide](https://electronjs.org/docs/tutorial/quick-start).
+## Installation
+To run the Voter Pass application locally, follow these steps:
 
-## To Use
-
-From your command line:
+1. Clone the repository:
 
 ```bash
-# Clone this repository
-git clone https://github.com/trevor-forget
-# Go into the repository
-cd trevor-forget
-# Install dependencies
-npm install
-# May need to run manual dependencies of:
-npm install -g gulp
-npm install fomantic-ui
-
-# Run the app
-npm start
+  git clone https://github.com/navidali/voter-pass.git
 ```
 
-Note: If you're using Linux Bash for Windows, [see this guide](https://www.howtogeek.com/261575/how-to-run-graphical-linux-desktop-applications-from-windows-10s-bash-shell/) or use `node` from the command prompt.
+2. Install the dependencies:
 
-## Resources for Learning Electron
+```bash
+  cd voter-pass
+  npm install
+```
 
-- [electronjs.org/docs](https://electronjs.org/docs) - all of Electron's documentation
-- [electronjs.org/community#boilerplates](https://electronjs.org/community#boilerplates) - sample starter apps created by the community
-- [electron/electron-quick-start](https://github.com/electron/electron-quick-start) - a very basic starter Electron app
-- [electron/simple-samples](https://github.com/electron/simple-samples) - small applications with ideas for taking them further
-- [electron/electron-api-demos](https://github.com/electron/electron-api-demos) - an Electron app that teaches you how to use Electron
-- [hokein/electron-sample-apps](https://github.com/hokein/electron-sample-apps) - small demo apps for the various Electron APIs
+3. Start the application:
 
-## License
-
-[CC0 1.0 (Public Domain)](LICENSE.md)
+```bash
+  npm start
+```
