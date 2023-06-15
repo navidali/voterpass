@@ -23,13 +23,13 @@ To run the Voter Pass application locally, follow these steps:
 1. Clone the repository:
 
 ```bash
-  git clone https://github.com/navidali/voter-pass.git
+  git clone https://github.com/navidali/voterpass.git
 ```
 
 2. Install the dependencies:
 
 ```bash
-  cd voter-pass
+  cd voterpass
   npm install
 ```
 
